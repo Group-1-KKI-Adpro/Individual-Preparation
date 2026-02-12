@@ -26,7 +26,34 @@ public class ArithmeticUtility {
     }
 
     public double exponent(double o1, int n) {
-        // TODO: Implement me properly!
-        return 0.0;
+        double res = 1.0;
+        int exp;
+        double base;
+
+        //Edge Cases
+        if (n == 0) return 1.0;
+        if (n < 0 && o1 == 0.0) {
+            throw new IllegalArgumentException("0 cannot be raised to a negative power.");
+        }
+
+        //Base and Exp Setup
+        if (n < 0) {
+            base = 1.0 / o1;
+            exp = -n;
+        } else {
+            base = o1;
+            exp = n;
+        }
+
+        //Binary Exponentiation
+        while (exp > 0) {
+            if ((exp & 1) == 1) {
+                res *= base;
+            }
+            base *= base;
+            exp >>= 1;
+        }
+
+        return res;
     }
 }
