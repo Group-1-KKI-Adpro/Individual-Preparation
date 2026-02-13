@@ -1,6 +1,7 @@
 plugins {
 	id 'java'
 	id 'checkstyle'
+	id 'jacoco'
 	id 'org.springframework.boot' version '4.0.2'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
@@ -34,5 +35,21 @@ checkstyle {
 }
 
 tasks.withType(Checkstyle) {
-	ignoreFailures = false // IMPORTANT: makes CI fail if lint errors exist
+	ignoreFailures = false
+}
+
+jacoco {
+	toolVersion = "0.8.11"
+}
+
+tasks.test {
+	finalizedBy tasks.jacocoTestReport
+}
+
+tasks.jacocoTestReport {
+	dependsOn tasks.test
+	reports {
+		xml.required = true   // required for SonarCloud
+		html.required = true
+	}
 }
