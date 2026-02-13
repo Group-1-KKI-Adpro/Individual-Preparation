@@ -1,5 +1,6 @@
 plugins {
 	id 'java'
+	id 'checkstyle'
 	id 'org.springframework.boot' version '4.0.2'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
@@ -26,4 +27,12 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+checkstyle {
+	toolVersion = "10.12.4"
+}
+
+tasks.withType(Checkstyle) {
+	ignoreFailures = false // IMPORTANT: makes CI fail if lint errors exist
 }
