@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '4.0.2'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'jacoco'
 }
 
 group = 'com.example'
@@ -26,4 +27,27 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+test {
+	useJUnitPlatform()
+
+	// a) Exclude functional tests from running in "test" task
+	filter {
+		excludeTestsMatching "*FunctionalTest"
+	}
+
+	// b) Always generate coverage report after tests
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+	// c) Ensure report task runs after tests
+	dependsOn test
+
+	reports {
+		html.required = true
+		xml.required = true
+		csv.required = false
+	}
 }
