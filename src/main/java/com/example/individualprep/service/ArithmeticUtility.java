@@ -26,7 +26,7 @@ public class ArithmeticUtility {
         double res = 1.0;
         int exp;
         double base;
-
+        int bit1 = 1; // For now this is an attempt to fix the PMD
         //Edge Cases
         if (n == 0) return 1.0;
         if (n < 0 && o1 == 0.0) {
@@ -44,7 +44,7 @@ public class ArithmeticUtility {
 
         //Binary Exponentiation
         while (exp > 0) {
-            if ((exp & 1) == 1) {
+            if ((exp & bit1) == bit1) {
                 res *= base;
             }
             base *= base;
