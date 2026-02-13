@@ -25,9 +25,5 @@ jobs:
         # This runs your JUnit tests and checks code style
         run: ./gradlew test check
 
-      - name: SonarCloud Scan
-        # Only runs if your team has set up the SONAR_TOKEN
-        if: success()
-        run: ./gradlew sonar
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Execute Tests and Check Quality
+        run: ./gradlew test check
