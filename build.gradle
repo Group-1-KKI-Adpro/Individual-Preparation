@@ -4,6 +4,14 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
+sonar {
+	properties {
+		property "sonar.projectKey", "your_project_key"
+		property "sonar.organization", "your_org_name"
+		property "sonar.host.url", "https://sonarcloud.io"
+	}
+}
+
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 description = 'Individual preparation for the Advanced Programming course at the Faculty of Computer Science Universitas Indonesia'
