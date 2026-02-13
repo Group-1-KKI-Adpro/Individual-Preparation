@@ -19,7 +19,7 @@ public class ArithmeticUtility {
     }
 
     public double divide(double o1, double o2) {
-        return o1/o2;
+        return o1 / o2;
     }
 
     public double exponent(double o1, int n) {
@@ -28,7 +28,9 @@ public class ArithmeticUtility {
         double base;
 
         //Edge Cases
-        if (n == 0) return 1.0;
+        if (n == 0) {
+            return 1.0;
+        }
         if (n < 0 && o1 == 0.0) {
             throw new IllegalArgumentException("0 cannot be raised to a negative power.");
         }
