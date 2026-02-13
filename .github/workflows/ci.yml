@@ -35,6 +35,6 @@ jobs:
         with:
           args: >
             -Dsonar.organization=group-1-kki-adpro
-            -Dsonar.projectKey=PROJECT_KEY_HERE
+            -Dsonar.projectKey=Group-1-KKI-Adpro_Individual-Preparation
             -Dsonar.java.binaries=build/classes
             -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
