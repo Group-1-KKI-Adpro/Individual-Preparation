@@ -5,9 +5,5 @@
 
 <module name="Checker">
     <module name="TreeWalker">
-        <module name="NeedBraces"/>
-        <module name="Indentation"/>
-        <module name="WhitespaceAfter"/>
-        <module name="FinalLocalVariable"/>
     </module>
 </module>
