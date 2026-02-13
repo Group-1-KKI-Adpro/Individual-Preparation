@@ -25,8 +25,8 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Run unit tests + JaCoCo report
-        run: ./gradlew test jacocoTestReport
+      - name: Build + Test + Lint
+        run: ./gradlew clean check jacocoTestReport
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
