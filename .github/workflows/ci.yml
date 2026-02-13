@@ -6,12 +6,14 @@ on:
 
 jobs:
   test:
-    name: Run tests
+    name: Test + Quality
     runs-on: ubuntu-22.04
 
     steps:
       - name: Check out the Git repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Java toolchain
         uses: actions/setup-java@v4
@@ -23,5 +25,16 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Run unit tests
-        run: ./gradlew test
+      - name: Run unit tests + JaCoCo report
+        run: ./gradlew test jacocoTestReport
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=group-1-kki-adpro
+            -Dsonar.projectKey=PROJECT_KEY_HERE
+            -Dsonar.java.binaries=build/classes
+            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
