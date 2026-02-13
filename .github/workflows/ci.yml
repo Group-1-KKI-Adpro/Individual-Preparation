@@ -1,29 +1,43 @@
-name: Java CI with Gradle
+name: Continuous Integration (CI)
 
 on:
   push:
-    branches: [ "master", "main" ]
   pull_request:
-    branches: [ "master", "main" ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+  test:
+    name: Test + Quality
+    runs-on: ubuntu-22.04
 
-      - name: Set up JDK 17
+    steps:
+      - name: Check out the Git repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Java toolchain
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          distribution: temurin
+          java-version: "21"
+          cache: gradle
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
 
-      - name: Execute Tests and Check Quality
-        # This runs your JUnit tests and checks code style
-        run: ./gradlew test check
+      - name: Run unit tests + JaCoCo report
+        run: ./gradlew test jacocoTestReport
 
-      - name: Execute Tests and Check Quality
-        run: ./gradlew test check
+      - name: Run Checkstyle
+        run: ./gradlew checkstyleMain checkstyleTest
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.GABRIEL_SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=group-1-kki-adpro
+            -Dsonar.projectKey=Group-1-KKI-Adpro_Individual-Preparation
+            -Dsonar.java.binaries=build/classes
+            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml

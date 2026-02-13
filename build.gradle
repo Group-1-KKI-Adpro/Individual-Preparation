@@ -1,9 +1,11 @@
 plugins {
 	id 'java'
+	id 'checkstyle'
 	id 'org.springframework.boot' version '4.0.2'
 	id 'io.spring.dependency-management' version '1.1.7'
-	// ADDED: The Sonar plugin is required to run the 'sonar' task
 	id "org.sonarqube" version "4.4.1.3373"
+	// ADDED: Required to run 'jacocoTestReport' task in your CI
+	id 'jacoco'
 }
 
 group = 'com.example'
@@ -16,11 +18,11 @@ java {
 	}
 }
 
-// Ensure these properties match your actual SonarCloud project details
 sonar {
 	properties {
-		property "sonar.projectKey", "Individual-Preparation-Group-1" // Replace with your real key
-		property "sonar.organization", "group-1-kki-adpro"           // Replace with your real org
+		// Ensure these match exactly what is on SonarCloud dashboard
+		property "sonar.projectKey", "Individual-Preparation-Group-1"
+		property "sonar.organization", "group-1-kki-adpro"
 		property "sonar.host.url", "https://sonarcloud.io"
 	}
 }
@@ -31,12 +33,28 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-
-	// UPDATED: This starter includes JUnit 5 (Jupiter) and Assertions
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+	// ADDED: Ensures the report is generated automatically after tests run
+	finalizedBy jacocoTestReport
+}
+
+// ADDED: Configures the JaCoCo report format for SonarCloud
+tasks.named('jacocoTestReport') {
+	dependsOn test // Tests must run before generating the report
+	reports {
+		xml.required = true // SonarCloud needs XML to read coverage data
+	}
+}
+
+checkstyle {
+	toolVersion = "10.12.4"
+}
+
+tasks.withType(Checkstyle) {
+	ignoreFailures = false
 }
